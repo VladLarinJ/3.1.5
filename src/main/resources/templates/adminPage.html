@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin page</title>
+</head>
+<body>
+<h1>Мое имя</h1>
+<p th:text="${admin.getName()}"/>
+<h1>Моя фамилия</h1>
+<p th:text="${admin.getLastName()}"/>
+<h1>Мой адрес электронной почты</h1>
+<p th:text="${admin.getEmail()}"/>
+
+<br/>
+
+<a th:href="@{/admin/user_list}">Список пользователей</a>
+
+<br/>
+
+<a th:href="@{/admin/new_user}">Добавить пользователя</a>
+
+<br/>
+
+<a th:href="@{/logout}">Покинуть страницу</a>
+</body>
+</html>

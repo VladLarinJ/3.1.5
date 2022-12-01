@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add some User</title>
+</head>
+<body>
+<h1>Мое имя</h1>
+<p th:text="${user.getName()}"/>
+<h1>Моя фамилия</h1>
+<p th:text="${user.getLastName()}"/>
+<h1>Мой адрес электронной почты</h1>
+<p th:text="${user.getEmail()}"/>
+
+<br>
+
+<a th:href="@{/logout}">Покинуть страницу</a>
+
+</body>
+</html>
