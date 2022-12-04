@@ -12,6 +12,8 @@
         <th scope="col">Имя </th>
         <th scope="col">Фамилия</th>
         <th scope="col">Адрес электронной почты</th>
+        <th scope="col">Пароль</th>
+        <th scope="col">Роль</th>
     </tr>
     </thead>
     <tbody>
@@ -19,9 +21,13 @@
         <td th:text="${user.getName()}"/>
         <td th:text="${user.getLastName()}"/>
         <td th:text="${user.getEmail()}"/>
+        <td th:text="${user.getPassword()}"/>
+        <td th:each="role : ${user.getRoles}" th:text="${role.getName()}"></td>
         <td><a th:href="@{/admin/user_list/{id}(id=${user.getId()})}">Страница пользователя</a></td>
     </tbody>
 </table>
+
+<a th:href="@{/logout}">Выйти из аккаунта</a>
 
 </body>
 </html>

@@ -2,19 +2,23 @@ package ru.kata.spring.boot_security.demo.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
+import ru.kata.spring.boot_security.demo.repositories.RoleDao;
 import ru.kata.spring.boot_security.demo.repositories.UserDao;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,10 +26,13 @@ import java.util.stream.Collectors;
 public class UserServiceImp implements UserService, UserDetailsService {
 
     private final UserDao userDao;
+    private final RoleDao roleDao;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Transactional
     @Override
     public void add(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.add(user);
     }
 
@@ -44,6 +51,12 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Transactional
     @Override
     public void updateUser(User user) {
+        Set<Role> roleSet = new HashSet<>();
+        for (Role role : user.getRoles()) {
+            roleSet.add(roleDao.getById(role.getId()));
+        }
+        user.setRoles(roleSet);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.updateUser(user);
     }
 

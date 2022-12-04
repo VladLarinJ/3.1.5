@@ -1,6 +1,8 @@
 package ru.kata.spring.boot_security.demo.entities;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
@@ -9,8 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+
 @Entity
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
     @Id
@@ -24,9 +29,19 @@ public class Role implements GrantedAuthority {
         return name;
     }
 
+    @Override
     public String toString() {
         return this.name;
     }
+
+    public Role(Integer id) {
+        this.id = id;
+    }
+
+//    public Role(String name) {
+//        this.name = name;
+//    }
+
 
     @Override
     public int hashCode() {
@@ -49,8 +64,9 @@ public class Role implements GrantedAuthority {
         }
                 Role other = (Role) obj;
         if (id == null) {
-            if (other.id != null)
-            return false;
+            if (other.id != null) {
+                return false;
+            }
         } else if (!id.equals(other.id)) {
             return false;
         }

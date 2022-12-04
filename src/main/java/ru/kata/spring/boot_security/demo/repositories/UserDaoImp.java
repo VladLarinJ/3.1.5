@@ -17,7 +17,7 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public void add(User user) {
-        entityManager.persist(user);
+            entityManager.persist(user);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public User getUserByName(String name) {
-        return (User) entityManager.createQuery("from User where name =: name")
+        return  (User) entityManager.createQuery("from User where name =: name")
                 .setParameter("name", name)
                 .getSingleResult();
     }

@@ -27,12 +27,23 @@
 
     <br>
 
-<!--    <label for="role">Role</label>-->
-<!--    <input name="role" th:field="*{roles}" id="role"/>-->
+    <p>
+        <label for="roles"> Роли:</label>
+            <input type="checkbox" name="roles"
+                   th:each="role: ${roles}"
+                   th:text="${role.getName()}"
+                   th:value="${role.getId()}"
+                   th:field="*{roles}"
+                   id="roles"
+            />
+    </p>
 
-<!--    <br>-->
+    <br>
 
     <input type="submit" value="Обновить пользователя"/>
 </form>
+<br>
+
+<a th:href="@{/logout}">Выйти из аккаунта</a>
 </body>
 </html>
