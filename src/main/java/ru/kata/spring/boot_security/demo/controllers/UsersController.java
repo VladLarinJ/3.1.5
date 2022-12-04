@@ -11,15 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/")
@@ -66,14 +63,7 @@ public class UsersController {
     @PostMapping("/admin/new_user")
     public String addUser(@RequestParam ArrayList<Integer> roles, @RequestParam String name,
                           @RequestParam String lastName, @RequestParam String password, @RequestParam String email) {
-
-        Set<Role> roleSet = new HashSet<>();
-        for (Integer roleId : roles) {
-            roleSet.add(new Role(roleId));
-        }
-        User user = new User(name, password, email, lastName, roleSet);
-        user.setRoles(roleSet);
-        userService.add(user);
+        userService.add(roles, name, lastName, password, email);
         return "redirect:/admin/user_list";
     }
 
@@ -87,17 +77,7 @@ public class UsersController {
     @PatchMapping("/admin/user_list/{id}")
     public String updateUser(@RequestParam ArrayList<Integer> roles, @RequestParam String name,
                              @RequestParam String lastName, @RequestParam String password, @RequestParam String email) {
-        Set<Role> roleSet = new HashSet<>();
-        for (Integer roleId : roles) {
-            roleSet.add(new Role(roleId));
-        }
-        User user = userService.getUserByName(name);
-        user.setRoles(roleSet);
-        user.setEmail(email);
-        user.setName(name);
-        user.setLastName(lastName);
-        user.setPassword(password);
-        userService.updateUser(user);
+        userService.updateUser(roles, name, lastName, password, email);
         return "redirect:/admin/user_list";
     }
 

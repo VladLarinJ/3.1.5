@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,8 @@ import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.repositories.RoleDao;
 import ru.kata.spring.boot_security.demo.repositories.UserDao;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +34,13 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Transactional
     @Override
-    public void add(User user) {
+    public void add(ArrayList<Integer> roles, String name, String lastName, String password, String email) {
+        Set<Role> roleSet = new HashSet<>();
+        for (Integer roleId : roles) {
+            roleSet.add(new Role(roleId));
+        }
+        User user = new User(name, password, email, lastName, roleSet);
+        user.setRoles(roleSet);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.add(user);
     }
@@ -50,12 +59,23 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Transactional
     @Override
-    public void updateUser(User user) {
+    public void updateUser(ArrayList<Integer> roles, String name, String lastName, String password, String email) {
         Set<Role> roleSet = new HashSet<>();
-        for (Role role : user.getRoles()) {
-            roleSet.add(roleDao.getById(role.getId()));
+        for (Integer roleId : roles) {
+            roleSet.add(new Role(roleId));
         }
+        User user = userDao.getUserByName(name);
         user.setRoles(roleSet);
+        user.setEmail(email);
+        user.setName(name);
+        user.setLastName(lastName);
+        user.setPassword(password);
+
+        Set<Role> roleSet1 = new HashSet<>();
+        for (Role role : user.getRoles()) {
+            roleSet1.add(roleDao.getById(role.getId()));
+        }
+        user.setRoles(roleSet1);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.updateUser(user);
     }
