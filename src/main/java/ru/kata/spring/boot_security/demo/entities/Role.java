@@ -38,11 +38,6 @@ public class Role implements GrantedAuthority {
         this.id = id;
     }
 
-//    public Role(String name) {
-//        this.name = name;
-//    }
-
-
     @Override
     public int hashCode() {
         final int prime = 31;

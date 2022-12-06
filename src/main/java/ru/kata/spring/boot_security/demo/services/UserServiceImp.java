@@ -1,14 +1,14 @@
 package ru.kata.spring.boot_security.demo.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.entities.Role;
@@ -16,7 +16,6 @@ import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.repositories.RoleDao;
 import ru.kata.spring.boot_security.demo.repositories.UserDao;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -30,7 +29,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     private final UserDao userDao;
     private final RoleDao roleDao;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final MyPasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
@@ -41,7 +40,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
         }
         User user = new User(name, password, email, lastName, roleSet);
         user.setRoles(roleSet);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.getPasswordEncoder().encode(user.getPassword()));
         userDao.add(user);
     }
 
@@ -76,7 +75,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
             roleSet1.add(roleDao.getById(role.getId()));
         }
         user.setRoles(roleSet1);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.getPasswordEncoder().encode(user.getPassword()));
         userDao.updateUser(user);
     }
 

@@ -1,11 +1,8 @@
 package ru.kata.spring.boot_security.demo.repositories;
 
 import lombok.RequiredArgsConstructor;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.entities.Role;
-import ru.kata.spring.boot_security.demo.entities.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
