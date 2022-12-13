@@ -25,9 +25,12 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    private Integer age;
 
     private String name;
 
@@ -44,12 +47,14 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    public User(String name, String password, String email, String lastName, Set<Role> roles) {
+
+    public User(String name, String password, String email, String lastName, Integer age, Set<Role> roles) {
         this.name = name;
         this.password = password;
         this.email = email;
         this.lastName = lastName;
         this.roles = roles;
+        this.age = age;
     }
 
     @Override

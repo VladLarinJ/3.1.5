@@ -1,11 +1,6 @@
 package ru.kata.spring.boot_security.demo.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,12 +24,12 @@ public class UserServiceImp implements UserService {
 
     @Transactional
     @Override
-    public void add(ArrayList<Integer> roles, String name, String lastName, String password, String email) {
+    public void add(ArrayList<Integer> roles, String name, String lastName, String password, String email, Integer age) {
         Set<Role> roleSet = new HashSet<>();
         for (Integer roleId : roles) {
             roleSet.add(new Role(roleId));
         }
-        User user = new User(name, password, email, lastName, roleSet);
+        User user = new User(name, password, email, lastName, age, roleSet);
         user.setRoles(roleSet);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.add(user);
@@ -54,17 +49,18 @@ public class UserServiceImp implements UserService {
 
     @Transactional
     @Override
-    public void updateUser(ArrayList<Integer> roles, String name, String lastName, String password, String email) {
+    public void updateUser(ArrayList<Integer> roles, String name, String lastName, String password, String email, Integer age, Integer id) {
         Set<Role> roleSet = new HashSet<>();
         for (Integer roleId : roles) {
             roleSet.add(new Role(roleId));
         }
-        User user = userDao.getUserByName(name);
+        User user = userDao.getUserById(id);
         user.setRoles(roleSet);
         user.setEmail(email);
         user.setName(name);
         user.setLastName(lastName);
         user.setPassword(password);
+        user.setAge(age);
 
         Set<Role> roleSet1 = new HashSet<>();
         for (Role role : user.getRoles()) {
@@ -89,5 +85,10 @@ public class UserServiceImp implements UserService {
     @Override
     public User getUserByName(String name) {
         return userDao.getUserByName(name);
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userDao.getUserByEmail(email);
     }
 }
