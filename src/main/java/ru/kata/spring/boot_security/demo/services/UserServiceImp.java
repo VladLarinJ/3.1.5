@@ -59,7 +59,7 @@ public class UserServiceImp implements UserService {
         user.setEmail(email);
         user.setName(name);
         user.setLastName(lastName);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         user.setAge(age);
 
         Set<Role> roleSet1 = new HashSet<>();
@@ -67,7 +67,7 @@ public class UserServiceImp implements UserService {
             roleSet1.add(roleDao.getById(role.getId()));
         }
         user.setRoles(roleSet1);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.updateUser(user);
     }
 
