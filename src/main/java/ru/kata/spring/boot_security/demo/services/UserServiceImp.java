@@ -24,7 +24,7 @@ public class UserServiceImp implements UserService {
 
     @Transactional
     @Override
-    public void add(ArrayList<Integer> roles, String name, String lastName, String password, String email, Integer age) {
+    public User add(ArrayList<Integer> roles, String name, String lastName, String password, String email, Integer age) {
         Set<Role> roleSet = new HashSet<>();
         for (Integer roleId : roles) {
             roleSet.add(new Role(roleId));
@@ -33,6 +33,15 @@ public class UserServiceImp implements UserService {
         user.setRoles(roleSet);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.add(user);
+        return user;
+    }
+
+    @Transactional
+    @Override
+    public User add(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userDao.add(user);
+        return user;
     }
 
     @Transactional
@@ -49,7 +58,7 @@ public class UserServiceImp implements UserService {
 
     @Transactional
     @Override
-    public void updateUser(ArrayList<Integer> roles, String name, String lastName, String password, String email, Integer age, Integer id) {
+    public User updateUser(ArrayList<Integer> roles, String name, String lastName, String password, String email, Integer age, Integer id) {
         Set<Role> roleSet = new HashSet<>();
         for (Integer roleId : roles) {
             roleSet.add(new Role(roleId));
@@ -69,12 +78,14 @@ public class UserServiceImp implements UserService {
         user.setRoles(roleSet1);
 //        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.updateUser(user);
+        return user;
     }
 
     @Transactional
     @Override
-    public void deleteUser(Integer id) {
+    public User deleteUser(Integer id) {
         userDao.deleteUser(id);
+        return null;
     }
 
     @Override
@@ -90,5 +101,10 @@ public class UserServiceImp implements UserService {
     @Override
     public User getUserByEmail(String email) {
         return userDao.getUserByEmail(email);
+    }
+
+    @Override
+    public void updateUser(User updatedUser) {
+        userDao.updateUser(updatedUser);
     }
 }

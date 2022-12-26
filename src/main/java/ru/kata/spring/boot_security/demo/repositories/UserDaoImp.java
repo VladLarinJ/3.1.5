@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.repositories;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.entities.User;
 
 import javax.persistence.EntityManager;
@@ -28,6 +29,7 @@ public class UserDaoImp implements UserDao {
         return entityManager.createQuery("from User", User.class).getResultList();
     }
 
+    @Transactional
     @Override
     public void updateUser(User user) {
         entityManager.merge(user);
